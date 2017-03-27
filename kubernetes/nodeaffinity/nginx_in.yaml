@@ -1,0 +1,129 @@
+---
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: nginx
+spec:
+  replicas: 4
+  template:
+    metadata:
+      labels:
+        app: nginx
+      annotations:
+        scheduler.alpha.kubernetes.io/affinity: >
+          {
+            "nodeAffinity": {
+              "requiredDuringSchedulingIgnoredDuringExecution": {
+                "nodeSelectorTerms": [
+                  {
+                    "matchExpressions": [
+                      {
+                        "key": "group",
+                        "operator": "In",
+                        "values": ["group1", "group2"]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+    spec:
+      hostNetwork: false
+      containers:
+      - name: nginx
+        image: nginx:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - protocol: TCP
+          containerPort: 80
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+---
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: nginx
+spec:
+  replicas: 4
+  template:
+    metadata:
+      labels:
+        app: nginx
+      annotations:
+        scheduler.alpha.kubernetes.io/affinity: >
+          {
+            "nodeAffinity": {
+              "requiredDuringSchedulingIgnoredDuringExecution": {
+                "nodeSelectorTerms": [
+                  {
+                    "matchExpressions": [
+                      {
+                        "key": "group",
+                        "operator": "In",
+                        "values": ["group1", "group2"]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+    spec:
+      hostNetwork: false
+      containers:
+      - name: nginx
+        image: nginx:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - protocol: TCP
+          containerPort: 80
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+---
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: nginx
+spec:
+  replicas: 4
+  template:
+    metadata:
+      labels:
+        app: nginx
+      annotations:
+        scheduler.alpha.kubernetes.io/affinity: >
+          {
+            "nodeAffinity": {
+              "requiredDuringSchedulingIgnoredDuringExecution": {
+                "nodeSelectorTerms": [
+                  {
+                    "matchExpressions": [
+                      {
+                        "key": "group",
+                        "operator": "In",
+                        "values": ["group1", "group2"]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+    spec:
+      hostNetwork: false
+      containers:
+      - name: nginx
+        image: nginx:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - protocol: TCP
+          containerPort: 80
+        resources:
+          requests:
+            cpu: 500m
+            memory: 512Mi
