@@ -1,0 +1,43 @@
+---
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: nginx
+spec:
+  replicas: 4
+  template:
+    metadata:
+      labels:
+        app: nginx
+      annotations:
+        scheduler.alpha.kubernetes.io/affinity: >
+          {
+            "nodeAffinity": {
+              "requiredDuringSchedulingIgnoredDuringExecution": {
+                "nodeSelectorTerms": [
+                  {
+                    "matchExpressions": [
+                      {
+                        "key": "kernel-version",
+                        "operator": "Gt",
+                        "values": ["0320"]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+    spec:
+      hostNetwork: false
+      containers:
+      - name: nginx
+        image: nginx:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - protocol: TCP
+          containerPort: 80
+        resources:
+          limits:
+            cpu: 200m
+            memory: 256Mi
