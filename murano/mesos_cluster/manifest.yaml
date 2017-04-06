@@ -1,0 +1,11 @@
+Author: admin
+Description: 'This template will boot a Mesos cluster with one or more slaves (as
+  specified by the number_of_slaves parameter, which defaults to 1).
+
+  '
+Format: Heat.HOT/1.0
+FullName: io.murano.apps.generated.Mesoscluster
+Name: mesoscluster
+Tags:
+- Heat-generated
+Type: Application

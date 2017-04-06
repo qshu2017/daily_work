@@ -1,0 +1,20 @@
+#!/bin/bash
+
+BUILD_URL=http://pokgsa.ibm.com/projects/i/ibm-mesos/dailybuild-deb/last/
+TOP_DIR=`pwd`
+
+if [ ! -d $TOP_DIR/files ];then
+	mkdir -p $TOP_DIR/files
+fi
+
+wget $BUILD_URL -O index.html
+
+BUILD_PACKAGE=`cat index.html|grep mesos-ego|   awk '{print $5}' | cut -c7- | cut -f1 -d '"'`
+rm -rf index.html
+wget $BUILD_URL/$BUILD_PACKAGE; mv $BUILD_PACKAGE $TOP_DIR/files/
+
+<<<<<<< HEAD
+cd $TOP_DIR; docker build -t mesos-egomaster:test --no-cache .
+=======
+cd $TOP_DIR; docker build -t hchenxa1986/mesos-egomaster:1.1.1 --no-cache .
+>>>>>>> 8fb06469459d7c15a07a56c034d59a17136adfcf

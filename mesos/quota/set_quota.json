@@ -1,0 +1,16 @@
+{
+  "force": "false",
+  "role": "role1",
+  "guarantee": [
+    {
+      "name": "cpus",
+      "type": "SCALAR",
+      "scalar": { "value": 2 }
+    },
+    {
+      "name": "mem",
+      "type": "SCALAR",
+      "scalar": { "value": 512 }
+    }
+  ]
+}

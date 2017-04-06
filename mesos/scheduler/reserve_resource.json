@@ -1,0 +1,14 @@
+{
+	"resources": [
+			{
+			"name":"mem",
+			"type":"SCALAR",
+			"scalar":{"value":100},
+			"role":"*",
+			"reservation":{
+				"principal": "hchen_op"
+					}
+			}
+		]
+}
+

@@ -1,0 +1,272 @@
+asc_template_version: 2015-10-30
+
+description: >
+    Sample application template for a Spark 1.5.2 cluster that contains:
+      1. Spark master service for batch
+      2. Spark shuffle service
+      3. Spark notebook
+
+
+parameter_groups:
+    - label: Resource Groups
+      description: Parameters for resource groups
+      parameters:
+        - driver_rg_param
+        - executor_rg_param
+        - sparkms_batch_rg_param
+    - label: Consumers
+      description: Parameters for consumers
+      parameters:
+        - driver_consumer_param
+        - executor_consumer_param
+        - sparkms_batch_consumer_param
+
+parameters:
+    driver_rg_param:
+        type: string
+        label: Resource Group for Spark drivers
+        description: Resource group for the Spark drivers
+        constraints:
+            - custom_constraint: asc.getresourcegroup
+
+    executor_rg_param:
+        type: string
+        label: Resource Group for Spark executors and shuffle service
+        description: Resource group for the Spark executors and shuffle service
+        constraints:
+            - custom_constraint: asc.getresourcegroup
+
+    sparkms_batch_rg_param:
+        type: string
+        label: Resource Group for Spark master batch service
+        description: Resource group for the Spark master batch service
+        constraints:
+            - custom_constraint: asc.getresourcegroup
+
+    driver_consumer_param:
+        type: string
+        label: Consumer for Spark drivers
+        description: Consumer for the Spark drivers
+        default: spark
+
+    executor_consumer_param:
+        type: string
+        label: Consumer for Spark executors and shuffle service
+        description: Consumer for the Spark executors and shuffle service
+        default: spark
+
+    sparkms_batch_consumer_param:
+        type: string
+        label: Consumer for Spark master service for batch
+        description: Consumer for the Spark master service for batch
+        default: spark
+
+    execution_user:
+        type: string
+        label: spark execution user
+        description: spark execution user
+        default: root
+
+    deploy_home:
+        type: string
+        label: spark deploy home
+        description: spark deploy home
+        default: /opt/
+
+    cpulimit:
+        type: string
+        label: Spark MS CPU Limit
+        description: Total number of cores on the Spark MS node for use by Spark applications.
+        default: default
+
+    sparkms_image_name:
+        type: string
+        label: Spark MS image name
+        default: "hchenxa1986/spark-conductor:1.5.1"
+
+    sparkss_image_name:
+        type: string
+        label: Spark shuffer service image name
+        default: "hchenxa1986/spark-conductor:1.5.1"
+
+    registry_hostname:
+        type: string
+        label: Docker Registry Hostname and (optional) Port
+        description: Hostname of Docker registry
+        default: "docker-reg:5000"
+
+    master_web_port:
+        type: number
+        label: Spark Master Web UI Port
+        description: Port number for the Spark Master web UI
+        default: 8080
+        constraints:
+            - range: { min: 1025, max: 65535 }
+              description: Port range must be 1025-65535
+
+    master_port:
+        type: number
+        label: Spark Master Port
+        description: Port number for the Spark master
+        default: 7077
+        constraints:
+            - range: { min: 1025, max: 65535 }
+              description: Port range must be 1025-65535
+
+    lim_baseport:
+        type: number
+        label: EGO Lim Base Port
+        description: Based port of EGO lim
+        default: 7869
+        constraints:
+            - range: { min: 1025, max: 65535 }
+              description: Lim port range must be 1025-65535
+    driver_resourcegroup:
+        type: string
+        label: Resource group for Spark EGO Driver
+
+    executor_resourcegroup:
+        type: string
+        label: Resource grop for Spark Executor
+
+
+resources:
+    driver_consumer:
+        type: IBM::ASC::Consumer
+        properties:
+            path: { get_param: driver_consumer_param }
+            executionuser: { get_param: execution_user }
+            resourcegroups:
+                - { get_param: driver_rg_param}
+
+    executor_consumer:
+        type: IBM::ASC::Consumer
+        properties:
+            path: { get_param: executor_consumer_param }
+            executionuser: { get_param: execution_user }
+            resourcegroups:
+                - { get_param: executor_rg_param }
+
+    sparkms-pod:
+        type: IBM::ASC::DockerPod
+        properties:
+            sharedproperties:
+                startuptimeout_sec: 3600
+                network:
+                    type: host
+            containers:
+                - { get_resource: sparkms-container }
+
+    sparkss-pod:
+        type: IBM::ASC::DockerPod
+        properties:
+            sharedproperties:
+                startuptimeout_sec: 3600
+                network:
+                    type: host
+            containers:
+                - { get_resource: sparkss-container }
+
+    sparkms-container:
+        type: IBM::ASC::DockerContainer
+        properties:
+            imagename: { list_join: [ "", [ { get_param: sparkms_image_name} ] ] }
+            command: { list_join: [ " ", [ /opt/scripts/startms.sh $EGO_MASTER_LIST_PEM, {get_param: master_port}, { get_param: master_web_port } $EGO_KD_PORT ] ] }
+            privileged: true
+            environmentvariables:
+                SPARK_EGO_DRIVER_CONSUMER: { get_resource: driver_consumer }
+                SPARK_EGO_DRIVER_PLAN: { get_param: driver_resourcegroup }
+                SPARK_EGO_EXECUTOR_CONSUMER: { get_resource: executor_consumer }
+                SPARK_EGO_EXECUTOR_PLAN: { get_param: executor_resourcegroup }
+                EGO_BASE_PORT: { get_param: lim_baseport}
+
+    sparkss-container:
+        type: IBM::ASC::DockerContainer
+        properties:
+            imagename: { list_join: [ "", [ { get_param: sparkss_image_name } ] ] }
+            command: { list_join: [ " ", [ /opt/scripts/startss.sh $EGOSC_INSTANCE_HOST $EGO_KD_PORT ] ] }
+            privileged: true
+            environmentvariables:
+                EGO_BASE_PORT: { get_param: lim_baseport}
+                SPARK_EGO_DRIVER_CONSUMER: { get_resource: driver_consumer }
+                SPARK_EGO_DRIVER_PLAN: { get_param: driver_resourcegroup }
+                SPARK_EGO_EXECUTOR_CONSUMER: { get_resource: executor_consumer }
+                SPARK_EGO_EXECUTOR_PLAN: { get_param: executor_resourcegroup }
+
+
+    sparkms_activity:
+        type: IBM::ASC::Activity
+        properties:
+            docker: { get_resource: sparkms-pod }
+            workingdirectory: { get_param: deploy_home }
+            environmentvariables:
+                DEPLOY_HOME: { get_param: deploy_home }
+                SPARK_EGO_DRIVER_CONSUMER: { get_resource: driver_consumer }
+                SPARK_EGO_DRIVER_PLAN: { get_param: driver_rg_param }
+                SPARK_EGO_EXECUTOR_CONSUMER: { get_resource: executor_consumer }
+                SPARK_EGO_EXECUTOR_PLAN: { get_param: executor_rg_param }
+                CONDUCTOR_LOGFILE: { list_join: [ ".", [ "conductor", { get_attr: [_appinstance_, uuid] }, { get_attr: [_appinstance_, name] }, "${EGOSC_SERVICE_NAME}", "${EGOSC_INSTANCE_SEQNO}" ] ] }
+                SPARK_EGO_ENABLE_COLLECT_USAGE: true
+                SPARK_EGO_DRIVER_RESREQ: "select(('X86_64' || 'LINUXPPC64' || 'LINUXPPC64LE'))"
+                SPARK_EGO_EXECUTOR_RESREQ: "select(('X86_64' || 'LINUXPPC64' || 'LINUXPPC64LE'))"
+                APP_UUID: { get_attr: [_appinstance_, uuid] }
+
+
+    sparkss_activity:
+        type: IBM::ASC::Activity
+        properties:
+            os: [X86_64]
+            docker: { get_resource: sparkss-pod }
+            environmentvariables:
+                DEPLOY_HOME: { get_param: deploy_home }
+                SPARK_PRINT_LAUNCH_COMMAND: 0
+
+
+    sparkms-service:
+        type: IBM::ASC::Service
+        properties:
+            consumer:
+                name: { get_param: sparkms_batch_consumer_param }
+                executionuser: { get_param: execution_user }
+            description: Spark master service for batch
+            numinstances:
+                min: 1
+                max: 1
+                maxperhost: 1
+                instancetoslotratio: "1:1"
+            priority: 10
+            needcredential: true
+            resourcegroup:  { get_param: sparkms_batch_rg_param }
+            activity:
+                - { get_resource: sparkms_activity }
+            controlpolicy:
+                maxrestarts: 10
+                hostfailoverinterval_sec: 1
+                blockedhostexitvalues: [-1, 1]
+            collectusage: true
+            resourcerequirement: "select(('X86_64' || 'LINUXPPC64' || 'LINUXPPC64LE'))"
+
+
+    sparkss-service:
+        type: IBM::ASC::Service
+        properties:
+            consumer:
+                name: { get_param: executor_consumer_param }
+                executionuser: { get_param: execution_user }
+            description: Spark shuffle service
+            numinstances:
+                min: 1
+                max: 5000
+                maxperhost: 1
+                instancetoslotratio: "1:1"
+            priority: 10
+            needcredential: false
+            resourcegroup: { get_param: executor_rg_param }
+            activity:
+                - { get_resource: sparkss_activity }
+            controlpolicy:
+                maxrestarts: 10
+                hostfailoverinterval_sec: 1
+                blockedhostexitvalues: [-1, 1]
+            collectusage: true
+            resourcerequirement: "select(('X86_64' || 'LINUXPPC64' || 'LINUXPPC64LE'))"

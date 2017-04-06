@@ -1,0 +1,9 @@
+{
+	"framework_id": {"value": "a247bcbb-9b15-45c0-ac87-78d05819b2a7-0002"},
+	"type":"KILL",
+	"kill":{
+		"task_id":{"value":"2"}, 
+		"agent_id":{"value":"a247bcbb-9b15-45c0-ac87-78d05819b2a7-S0"}
+}
+}
+

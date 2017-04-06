@@ -1,0 +1,7 @@
+e0ec2bd549e0012a625ad8be7fdc77fcf7568b03	build
+d72dbadc3904f327effddf99594045067be2f529	files/log4j.properties
+0d4893899b9e12945843f3370b6c02953edd7bd1	files/spark-env.sh
+c47d8325936ac961a95513a613d224ee905683b4	files/configure_spark.sh
+8173314527b342bd0376f4ea7e911e791caf58c0	scala-2.10.3.tgz
+e0ec83cb99881f027a470f524a36a158bcb1c3d0	spark-1.1.0-bin-hadoop2.4.tgz
+aa5bd7c65b2e42dcda19c7d5c4ee6882ddd57fcf	Dockerfile

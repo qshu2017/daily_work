@@ -1,0 +1,4 @@
+e6fd32769eee7eda05d4b6c32fed59f93736ee0c	build
+5fd90fce04a8d9e44548768716ea6e27924e02a8	files/authorized_keys
+0cba776c473db2999e8aa00d2c314d20778df4b8	files/id_rsa
+d7015dff00c3956b36b9262c51e7eba5516799fc	Dockerfile

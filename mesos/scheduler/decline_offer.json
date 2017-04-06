@@ -1,0 +1,11 @@
+{
+	
+	"framework_id":{"value":"909e0785-6111-4b08-a548-15f2465dfb0a-0001"},
+	"type":"DECLINE",
+	"decline":{
+		"offer_ids":[
+				{"value":"909e0785-6111-4b08-a548-15f2465dfb0a-O21"}
+			],
+		"filters":{}
+	}
+}

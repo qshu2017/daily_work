@@ -1,0 +1,14 @@
+{
+	"type":"SUBSCRIBE",
+
+	"subscribe":{
+		"framework_info":{
+			"user":"hchentest",
+			"name":"hchentest1 Framework",
+			"principal":"hchentest",
+			"capabilities": {"type":"REVOCABLE_RESOURCES"}
+		},
+		"force": true
+	}
+}
+

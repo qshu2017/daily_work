@@ -1,0 +1,13 @@
+#!/bin/bash
+
+TOP_DIR=`pwd`
+
+if [ ! -d $TOP_DIR/files ];then
+	mkdir -p $TOP_DIR/files
+fi
+
+<<<<<<< HEAD
+cd $TOP_DIR; docker build -t mesos-egomaster:test --no-cache .
+=======
+cd $TOP_DIR; docker build -t hchenxa1986/platform-asc:1.1.1 --no-cache .
+>>>>>>> 8fb06469459d7c15a07a56c034d59a17136adfcf

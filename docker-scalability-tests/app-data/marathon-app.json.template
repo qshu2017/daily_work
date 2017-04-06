@@ -1,0 +1,18 @@
+{
+  "id": "APP_ID",
+  "cmd": "httpd -f -p 3000",
+  "cpus": 0.025,
+  "mem": 16.0,
+  "instances": 1,
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "image": "busybox",
+      "network": "BRIDGE",
+      "portMappings": [
+        { "containerPort": 3000, "hostPort": _PORT_, "protocol": "tcp" }
+      ]
+    }
+  }
+}
+

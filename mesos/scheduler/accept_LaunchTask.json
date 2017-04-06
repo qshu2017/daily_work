@@ -1,0 +1,39 @@
+{
+	
+	"framework_id":{"value":"52ce1504-ef93-4251-a20d-2a1c0a289be4-0000"},
+	
+	"type":"ACCEPT",
+	
+	"accept":{
+		"offer_ids":[
+				{"value":"52ce1504-ef93-4251-a20d-2a1c0a289be4-O3"}
+			],
+		"filters":{},
+		"operations":[
+				{
+				"type":"LAUNCH",
+				"launch":{"task_infos":[{
+							"name":"task 0",
+							"task_id":{"value": "0"},
+							"agent_id":{"value": "52ce1504-ef93-4251-a20d-2a1c0a289be4-S0"},
+							"resources":[
+									{
+									"name":"mem",
+									"type":"SCALAR",
+									"scalar":{"value":128.0}
+									},
+									{
+									"name":"cpus",
+									"type":"SCALAR",
+									"scalar":{"value":1.0}
+									}
+								],
+							"executor_id":{"value": "default"},
+							"command":{"value": "/bin/sleep 10"}
+							}
+							]
+						}	
+					}
+			]
+	}
+}

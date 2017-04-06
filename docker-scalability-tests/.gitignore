@@ -1,0 +1,4 @@
+data/
+*.swp
+nohup
+app-data/marathon-app.json

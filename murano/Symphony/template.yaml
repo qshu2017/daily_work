@@ -1,0 +1,104 @@
+
+heat_template_version: 2014-10-16
+
+description: Simple template for Symphony Cluster
+
+parameters:
+  # Paramters to define the network topology in stack
+  public_net_id:
+    type: string
+    description: ID of public network for which floating IP addresses will be allocated
+    default: 4c5b9bbb-7493-4d73-b7cd-9ceb18e7ec25
+  instance_flavor:
+    type: string
+    description: Nova flavor for this image.
+    default: m1.medium
+  image:
+    type: string
+    description: ID or name of the image to use for the instance to be created.
+    default: 3ffbcefc-f556-463c-8739-f2277f5881bb
+  key:
+    type: string
+    description: ID or name of the key to use for the instance to be created.
+    default: muranokey
+  private_net:
+    type: string
+    description: ID or name of the private net to use for the instance to be created.
+    default: ffb9c92f-0484-46c5-b1ce-c948a6117604 
+  min_size:
+    type: string
+    description: Minimum number of cluster compute node.
+    default: 2
+resources:
+  sym_master:
+    type: OS::Nova::Server
+    properties:
+      image: { get_param: image }
+      flavor: { get_param: instance_flavor }
+      key_name: { get_param: key }
+      user_data_format: RAW
+      networks:
+        - port: { get_resource: server_port_private_master }
+      user_data:
+        str_replace:
+          template: |
+            #!/bin/bash
+            SymMaster=`hostname -s`
+            echo "$master_host_ip ${SymMaster}" >> /etc/hosts
+            echo "ego_base   3.3   ()   ()   ()   ()   06b41994f026057bb5744d8e7f5db8d19f15dc86" >> /tmp/sym.entitlement
+            echo "sym_advanced_edition   7.1.1   ()   ()   ()   ()   aab59ec0734f956ae502d67b1cdb78f443775db4" >> /tmp/sym.entitlement
+            source /opt/ibm/platform/profile.platform
+            egosetsudoers.sh
+            su egoadmin -c "source /opt/ibm/platform/profile.platform; egoconfig join $SymMaster -f;egoconfig setentitlement /tmp/sym.entitlement;  egosh ego start"
+            rm -rf /tmp/sym.entitlement
+          params:
+            $master_host_ip: { get_attr: [server_port_private_master, fixed_ips, 0, ip_address] }
+
+  server_port_private_master:
+    type: OS::Neutron::Port
+    properties:
+      network_id: { get_param: private_net }
+
+  sym_compute_group:
+    type: OS::Heat::AutoScalingGroup
+    properties:
+      min_size: { get_param: min_size } 
+      max_size: 10
+      resource:
+        type: OS::Nova::Server
+        #depends_on: [ sym_master ]
+        properties:
+          image: { get_param: image }
+          flavor: { get_param: instance_flavor }
+          key_name: { get_param: key }
+          user_data_format: RAW
+          #pool_id: {get_resource: pool}
+          networks:
+            - network: { get_param: private_net }
+          user_data:
+            str_replace:
+              template: |
+                #!/bin/bash
+                Localhostname=`hostname -s`
+                hn_master=`ssh -t -o StrictHostKeyChecking=no centos@$master_host_ip hostname`
+                local_ip=`ip addr show eth0 | awk '$1 == "inet" {gsub(/\/.*$/, "", $2); print $2}'`
+                echo "$master_host_ip $hn_master" >> /etc/hosts
+                echo "$local_ip ${Localhostname}" >> /etc/hosts
+                echo "ego_base   3.3   ()   ()   ()   ()   06b41994f026057bb5744d8e7f5db8d19f15dc86" >> /tmp/sym.entitlement
+                echo "sym_advanced_edition   7.1.1   ()   ()   ()   ()   aab59ec0734f956ae502d67b1cdb78f443775db4" >> /tmp/sym.entitlement
+                ssh -t -o StrictHostKeyChecking=no centos@$master_host_ip "echo \"$local_ip $Localhostname\" >> /etc/hosts"
+                su egoadmin -c "source /opt/ibm/platform/profile.platform; egoconfig join $hn_master -f "
+                source /opt/ibm/platform/profile.platform
+                egosh ego start
+              params:
+                $master_host_ip: {get_attr: [sym_master, networks, { get_param: private_net }, 0]}
+
+outputs:
+  master_server_name:
+    value: {get_attr: [sym_master, name]}
+  master_server_internal_ip:
+    value: {get_attr: [server_port_private_master, fixed_ips, 0, ip_address]}
+ # compute_server_name:
+ #   value: {get_attr: [sym_compute_group, instance_name]}
+ # compute_server_internal_ip:
+ #   value: {get_attr: [server_port_private_compute, fixed_ips, 0, ip_address]} 

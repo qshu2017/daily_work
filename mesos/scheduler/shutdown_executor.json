@@ -1,0 +1,8 @@
+{
+	"framework_id":{"value":"ffc93740-76eb-49c2-a60e-6e60aa7d98a6-0000"},
+	"type":"SHUTDOWN",
+	"shutdown":{
+		"executor_id":{"value":"1"},
+		"agent_id":{"value":"ffc93740-76eb-49c2-a60e-6e60aa7d98a6-S0"}
+	}
+}

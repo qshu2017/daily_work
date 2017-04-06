@@ -1,0 +1,8 @@
+Author: IBM
+Description: Simple template for Symphony Cluster
+Format: Heat.HOT/1.0
+FullName: io.murano.apps.generated.SymphonyASG
+Name: Symphony_ASG
+Tags:
+- Heat-generated
+Type: Application

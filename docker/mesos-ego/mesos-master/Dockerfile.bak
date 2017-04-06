@@ -1,0 +1,22 @@
+FROM ubuntu:14.04
+MAINTAINER Hui XA Chen<hchenxa@cn.ibm.com>
+
+
+ENV http_proxy=http://hchen1.eng.platformlab.ibm.com:3128
+ENV https_proxy=http://hchen1.eng.platformlab.ibm.com:3128
+ENV TERM=xterm-256color
+
+RUN apt-get update && apt-get install tzdata-java && apt-get install libapr1 libcurl3-nss libgflags2 libsasl2-2 libsvn1 gcj-4.8-jre-headless gcj-jre-headless libcurl3 libsasl2-modules -y && apt-get autoclean
+
+COPY ./files/mesos_*.deb /opt/mesos/
+RUN dpkg -i /opt/mesos/mesos_*.deb && rm -rf /opt/mesos/mesos_*.deb
+
+ENV PATH=$PATH:/opt/ibm/mesos/sbin:/opt/ibm/mesos/bin
+
+RUN mkdir -p /var/lib/mesos /var/log/mesos
+
+#Include libmesos on library path
+ENV LD_LIBRARY_PATH $MESOS_HOME/lib
+
+
+ENTRYPOINT ["mesos-master", "--work_dir=/var/log/work", "--log_dir=/var/log/mesos"]

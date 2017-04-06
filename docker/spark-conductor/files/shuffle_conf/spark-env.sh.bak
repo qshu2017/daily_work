@@ -1,0 +1,11 @@
+SPARK_EGO_NATIVE_LIBRARY=/opt/spark-1.5.2-hadoop-2.6/lib/native/x86_64/libSparkVEMApi.so
+SPARK_EGO_LOG_DIR=/var/tmp/elk_logs
+SPARK_EGO_UMASK=027
+SPARK_INSTANCE_GROUP_ID=f23ab3a9-0db8-4c2d-bffd-8097605deef1
+SPARK_INSTANCE_GROUP_NAME=spark
+JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk-amd64/
+DEPLOY_MODE=cluster
+SPARK_PID_DIR=/opt/
+SPARK_EGO_RUN_AS_SERVICE=true
+SPARK_EGO_JARS=/opt/spark-1.5.2-hadoop-2.6/lib/ego/:/opt/spark-1.5.2-hadoop-2.6/lib/ego/*
+SPARK_EGO_ENABLE_SESSION_SCHEDULER=true

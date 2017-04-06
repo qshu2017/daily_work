@@ -1,0 +1,16 @@
+#!/bin/bash
+
+source ./scripts/common.inc
+
+# to make sure Spark and EGO use the same hostname
+export SPARK_MASTER_IP=$EGOSC_INSTANCE_HOST
+
+# create a master deamon custom Spark properties file
+#rm -rf ./master_conf
+#mkdir -p ./master_conf
+#cp $SPARK_HOME/conf/spark-defaults.conf ./master_conf
+#sed -i '/spark.port.maxRetries/d' ./master_conf/spark-defaults.conf
+#sed -i '/^spark.deploy.recoveryDirectory/ s?$?/'"$APP_UUID"'/'"$EGOSC_SERVICE_NAME"'/'"$EGOSC_INSTANCE_SEQNO"'?' ./master_conf/spark-defaults.conf
+#echo "spark.port.maxRetries 0" >> ./master_conf/spark-defaults.conf
+
+$SPARK_HOME/sbin/start-master.sh --properties-file ./master_conf/spark-defaults.conf

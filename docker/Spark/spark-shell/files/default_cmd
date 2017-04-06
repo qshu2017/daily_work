@@ -1,0 +1,16 @@
+#!/bin/bash
+
+source /root/spark_files/configure_spark.sh
+
+env
+
+echo "preparing Spark"
+prepare_spark $1 $2 $3 $4 $5 $6 $7 $8
+
+sleep 5
+
+echo "starting Spark Shell"
+
+cd $SPARK_HOME
+#sudo -u hdfs MASTER=spark://$1:$3 ./bin/spark-shell
+MASTER=spark://$1:$3 ./bin/spark-shell

@@ -1,0 +1,6 @@
+#get weight info
+curl -X GET http://hcdemo4.eng.platformlab.ibm.com:5050/weights
+
+#set weight for different role
+curl -X PUT -d jsonMessageBody http://hcdemo4.eng.platformlab.ibm.com:5050/weights
+

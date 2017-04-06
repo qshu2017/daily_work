@@ -1,0 +1,9 @@
+{
+	"framework_id":{"value":"ffc93740-76eb-49c2-a60e-6e60aa7d98a6-0000"},
+	"type":"ACKNOWLEDGE",
+	"acknowledge":{
+		"agent_id":{"value":"ffc93740-76eb-49c2-a60e-6e60aa7d98a6-S0"},
+		"task_id":{"value":"2"},
+		"uuid":"3wf+htwaTsiwxgZnrhhi7w=="
+	}
+}
