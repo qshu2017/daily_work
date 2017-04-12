@@ -29,7 +29,6 @@ kube-system   catalog-catalog-controller-manager   1         1         1        
 ```
 
 And also the deployment will be expose as the service
-
 ```console
 root@hchenk8s1:~# kc get service --all-namespaces | grep cata
 kube-system   catalog-catalog-apiserver   10.0.0.149   <nodes>       80:30080/TCP,443:30443/TCP       1d
@@ -45,6 +44,8 @@ apt install mysql-server
 ```
 
 and the mysql root password must be **root**
+
+And need to create a database named **test** by CREATE DATABASE test;
 
 
 2.Startup the broker server
