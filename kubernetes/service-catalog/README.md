@@ -75,7 +75,7 @@ SVC\_CAT\_API\_SERVER\_IP: The IP Address of the catalog-api service if you were
 Then create the service broker:
 
 ```console
-kubectl --context=service-catalog create -f mysql-binding.yaml
+kubectl --context=service-catalog create -f mysql-broker.yaml
 
 ```
 
@@ -259,4 +259,59 @@ type: Opaque
 ```
 
 ## Step 8 - Using the Secret
+
+Prepare test pod yaml file:
+
+```console
+{
+ "apiVersion": "v1",
+ "kind": "Pod",
+  "metadata": {
+    "name": "mypod",
+    "namespace": "default"
+  },
+  "spec": {
+    "containers": [{
+      "name": "mypod",
+      "image": "mysql:5.6",
+      "volumeMounts": [{
+        "name": "foo",
+        "mountPath": "/etc/foo",
+        "readOnly": true
+      }],
+      "command": ["/bin/sh"],
+      "args": ["-c", "while true; do sleep 100; done"]
+    }],
+    "volumes": [{
+      "name": "foo",
+      "secret": {
+        "secretName": "mysql-secret"
+      }
+    }]
+  }
+}
+```
+
+Create the pod resource
+
+```console
+kubectl exec -it mypod
+root@hchenk8s1:~# kubectl get pods
+NAME      READY     STATUS    RESTARTS   AGE
+mypod     1/1       Running   0          1m
+root@hchenk8s1:~# kubectl exec -it mypod bash
+root@mypod:/# cat /etc/foo/database
+cf_93a4eef9_5893_4198_a822_44f4eac0ae3f
+root@mypod:/# cat /etc/foo/username
+a9d8618ed37a38ea
+root@mypod:/# cat /etc/foo/password
+07c5e9a5-bd12-4bac-b6be-6f651903ba5f
+```
+
+Then use mysql client to try to connect
+
+```console
+
+```
+
 

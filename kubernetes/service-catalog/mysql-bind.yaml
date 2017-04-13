@@ -2,7 +2,7 @@ apiVersion: servicecatalog.k8s.io/v1alpha1
 kind: Binding
 metadata:
   name: mysql-binding1
-  namespace: hchentest
+  namespace: default 
 spec:
   instanceRef:
     name: mysql-instance
