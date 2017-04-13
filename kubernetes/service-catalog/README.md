@@ -62,80 +62,96 @@ The default port was 9000, we can use http://<host_ip>:9000/v2/catalog to check 
 
 ## Step 3 - Create broker resource
 
+First config the kube-config to connect service catalog api
+
 ```console
-root@hchenk8s1:~# kubeca get broker -o yaml
-apiVersion: v1
-items:
-- apiVersion: servicecatalog.k8s.io/v1alpha1
-  kind: Broker
-  metadata:
-    creationTimestamp: 2017-04-07T09:11:37Z
-    finalizers:
-    - kubernetes
-    name: mysql-broker
-    namespace: ""
-    resourceVersion: "393"
-    selfLink: /apis/servicecatalog.k8s.io/v1alpha1/brokersmysql-broker
-    uid: 343173af-1b72-11e7-9917-4a6adf82f80b
-  spec:
-    url: http://9.111.254.218:9000
-  status:
-    conditions:
-    - message: Error fetching catalog
-      reason: ErrorFetchingCatalog
-      status: "False"
-      type: Ready
-kind: List
-metadata: {}
-resourceVersion: ""
-selfLink: ""
+kubectl config set-cluster service-catalog --server=http://$SVC_CAT_API_SERVER_IP:30080
+kubectl config set-context service-catalog --cluster=service-catalog
+```
+
+SVC\_CAT\_API\_SERVER\_IP: The IP Address of the catalog-api service if you were using ClusterIP or the IP address of the Node if you were using NodePort
+
+
+Then create the service broker:
+
+```console
+kubectl --context=service-catalog create -f mysql-binding.yaml
+
+```
+
+Check the broker status
+
+
+```console
+root@hchenk8s1:~# kubectl --context=service-catalog get broker -o yaml
+apiVersion: servicecatalog.k8s.io/v1alpha1
+kind: Broker
+metadata:
+  creationTimestamp: 2017-04-12T05:12:31Z
+  finalizers:
+  - kubernetes
+  name: mysql-broker
+  resourceVersion: "424"
+  selfLink: /apis/servicecatalog.k8s.io/v1alpha1/brokersmysql-broker
+  uid: a14c47cb-1f3e-11e7-a0b9-b6ef720f6067
+spec:
+  url: http://9.111.254.218:9000
+status:
+  conditions:
+  - message: Successfully fetched catalog from broker.
+    reason: FetchedCatalog
+    status: "True"
+    type: Ready
 ```
 
 ## Step 4 - Check the catalog
 
+Check the service catalog:
+
 ```console
-root@hchenk8s1:~# kubeca get serviceclass -o yaml
-apiVersion: v1
-items:
-- apiVersion: servicecatalog.k8s.io/v1alpha1
-  bindable: false
-  brokerName: mysql-broker
-  kind: ServiceClass
-  metadata:
-    creationTimestamp: 2017-04-07T09:11:37Z
-    name: p-mysql
-    namespace: ""
-    resourceVersion: "302"
-    selfLink: /apis/servicecatalog.k8s.io/v1alpha1/serviceclassesp-mysql
-    uid: 343299e5-1b72-11e7-9917-4a6adf82f80b
-  osbGuid: 3101b971-1044-4816-a7ac-9ded2e028079
+root@hchenk8s1:~# kubectl --context=service-catalog get serviceclass -o yaml
+apiVersion: servicecatalog.k8s.io/v1alpha1
+bindable: false
+brokerName: mysql-broker
+description: MySQL service for application development and testing
+kind: ServiceClass
+metadata:
+  creationTimestamp: 2017-04-12T05:12:31Z
+  name: p-mysql
+  resourceVersion: "35"
+  selfLink: /apis/servicecatalog.k8s.io/v1alpha1/serviceclassesp-mysql
+  uid: a17649ae-1f3e-11e7-a0b9-b6ef720f6067
+osbGuid: 3101b971-1044-4816-a7ac-9ded2e028079
+osbMetadata:
+  listing:
+    blurb: MySQL service for application development and testing
+    imageUrl: null
+  provider:
+    name: null
+osbTags:
+- mysql
+- relational
+planUpdatable: false
+plans:
+- description: Shared MySQL Server, 5mb persistent disk, 40 max concurrent connections
+  name: 5mb
+  osbFree: false
+  osbGuid: 2451fa22-df16-4c10-ba6e-1f682d3dcdc9
   osbMetadata:
-    listing:
-      blurb: MySQL service for application development and testing
-      imageUrl: null
-    provider:
-      name: null
-  osbTags:
-  - mysql
-  - relational
-  planUpdatable: false
-  plans:
-  - name: 5mb
-    osbFree: false
-    osbGuid: 2451fa22-df16-4c10-ba6e-1f682d3dcdc9
-    osbMetadata:
-      bullets:
-      - content: Shared MySQL server
-      - content: 5 MB storage
-      - content: 40 concurrent connections
-      cost: 0
-kind: List
-metadata: {}
-resourceVersion: ""
-selfLink: ""
+    bullets:
+    - content: Shared MySQL server
+    - content: 5 MB storage
+    - content: 40 concurrent connections
+    cost: 0
 ```
 
 ## Step 5 - Create Instance
+
+```console
+kubectl --context=service-catalog create -f mysql-instance.yaml
+```
+
+And Check the instance status after creataion.
 
 ```console
 root@hchenk8s1:~# kubeca get instance --namespace=hchentest
@@ -175,6 +191,14 @@ selfLink: ""
 
 ## Step 6 - Binding Instance
 
+Then Create the mysql binding.
+
+```console
+kubectl --context=service-catalog create -f mysql-binding.yaml
+```
+
+Check the binding status
+
 ```console
 root@hchenk8s1:~# kubeca get binding --namespace=hchentest
 NAME            KIND
@@ -211,4 +235,28 @@ metadata: {}
 resourceVersion: ""
 selfLink: ""
 ```
+
+## Step 7 - Check the secret
+
+After the binding success, the kubernetes secret will be created under namespaces.
+
+```console
+root@hchenk8s1:~# kubectl get secret -o yaml mysql-secret
+apiVersion: v1
+data:
+  database: Y2ZfNDBkYTdjMjRfMjc5NV80YmI3X2FhZWVfNDdmNzRkNTY0ZjM2
+  password: ZjFmZjE1NDAtZTNkNi00OWQ3LTk5OTctODgwMzQyOTc0YWU1
+  username: MjRjNGMzMjdlNWE3NGYwZA==
+kind: Secret
+metadata:
+  creationTimestamp: 2017-04-13T01:54:31Z
+  name: mysql-secret
+  namespace: default
+  resourceVersion: "784356"
+  selfLink: /api/v1/namespaces/default/secrets/mysql-secret
+  uid: 22cfff41-1fec-11e7-9b2b-3aab550ec08b
+type: Opaque
+```
+
+## Step 8 - Using the Secret
 
