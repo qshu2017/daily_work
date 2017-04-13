@@ -271,6 +271,7 @@ Prepare test pod yaml file:
     "namespace": "default"
   },
   "spec": {
+    "hostNetworl": true,
     "containers": [{
       "name": "mypod",
       "image": "mysql:5.6",
@@ -311,7 +312,28 @@ root@mypod:/# cat /etc/foo/password
 Then use mysql client to try to connect
 
 ```console
+mysql -ua9d8618ed37a38ea -p07c5e9a5-bd12-4bac-b6be-6f651903ba5f -Dcf_93a4eef9_5893_4198_a822_44f4eac0ae3f -h9.111.254.218
+Warning: Using a password on the command line interface can be insecure.
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 4
+Server version: 5.7.11-0ubuntu6 (Ubuntu)
 
+Copyright (c) 2000, 2017, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++-----------------------------------------+
+| Database                                |
++-----------------------------------------+
+| information_schema                      |
+| cf_93a4eef9_5893_4198_a822_44f4eac0ae3f |
++-----------------------------------------+
+2 rows in set (0.00 sec)
 ```
 
 
