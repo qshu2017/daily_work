@@ -114,6 +114,9 @@ status:
     type: Ready
 ```
 
+After broker resource created, the connection between service catalog and broker server will be created.
+
+
 ## Step 4 - Check the catalog
 
 Check the service catalog:
@@ -198,6 +201,7 @@ resourceVersion: ""
 selfLink: ""
 ```
 
+Create Instance will send PUT request to broker server and broker server will handle to create the database with cf name perfix in mysql db
 
 ## Step 6 - Binding Instance
 
@@ -245,6 +249,10 @@ metadata: {}
 resourceVersion: ""
 selfLink: ""
 ```
+
+Bind Instance will send PUT request to broker server and broker server will create the username and password and grant the privileged for the db user and return the credentials to service catalog which used to create the kubernetes secret.
+
+So After the binging success, the kubernetes secret will be created.
 
 ## Step 7 - Check the secret
 
@@ -346,4 +354,5 @@ mysql> show databases;
 2 rows in set (0.00 sec)
 ```
 
+The connect success and can show my databases which created by broker server.
 
