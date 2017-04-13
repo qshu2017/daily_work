@@ -43,6 +43,14 @@ Environment requirement: Need java installed
 apt install mysql-server
 ```
 
+comment the bind-address in mysql config file:
+
+```console
+root@hchenk8s7:~# cat /etc/mysql/mysql.conf.d/mysqld.cnf | grep bind
+
+#bind-address		= 127.0.0.1
+```
+
 and the mysql root password must be **root**
 
 And need to create a database named **test** by CREATE DATABASE test;
