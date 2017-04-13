@@ -37,7 +37,7 @@ kube-system   catalog-catalog-apiserver   10.0.0.149   <nodes>       80:30080/TC
 ## Step 2 - Setup MySQL broker server
 Environment requirement: Need java installed.
 
-and the source code was here: https://github.com/cloudfoundry-community/cf-mysql-java-broker
+and the source code was here: https://github.com/hchenxa/cf-mysql-java-broker
 
 1.First setup the mysql server.
 
