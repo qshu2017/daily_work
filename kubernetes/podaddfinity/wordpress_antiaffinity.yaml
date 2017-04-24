@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: wordpress
+spec:
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+          - key: name
+            operator: In
+            values:
+            - mysql
+        topologyKey: kubernetes.io/hostname
+  containers:
+  - image: wordpress:4.7.3-apache
+    name: wordpress
+    env:
+    - name: WORDPRESS_DB_HOST
+      value: 10.1.226.66
+    - name: WORDPRESS_DB_PASSWORD
+      value: changeit
+    ports:
+    - containerPort: 80
+      name: wordpress
