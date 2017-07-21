@@ -74,3 +74,19 @@ Then test the gitlab connection by click the button
 
 ![expose from others](img/test_jenkins_connection.png)
 
+Create a sprintboot reposistory from [IBM Liberty](https://liberty-app-accelerator.wasdev.developer.ibm.com/start/) and clone the SprintBoot project
+
+
+Add the Git project in jenkins
+
+![expose from others](img/general.png)
+![expose from others](img/general2.png)
+![expose from others](img/general3.png)
+
+and save the project
+
+Then we can start the build by trigger a jenkins job
+
+![expose from others](img/build.png)
+
+
