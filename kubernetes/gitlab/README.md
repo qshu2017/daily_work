@@ -142,4 +142,8 @@ then config the maven project
 
 ![expose from others](img/private_repo.png)
 
+And set the private repository in the build steps:
+
+![expose from others](img/local_repository.png)
+
 
