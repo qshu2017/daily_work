@@ -131,18 +131,8 @@ drwxr-xr-x  9 hchenxa staff     306 Jul 21 13:26 ./
 drwxr-xr-x 12 hchenxa staff     408 Jul 21 13:27 .git/
 ```
 
-then config the maven repository in maven project
+then config the maven repository use local repository:
 
-
-first create the maven project
-
-![expose from others](img/maven_project.png)
-
-then config the maven project
-
-![expose from others](img/private_repo.png)
-
-And set the private repository in the build steps:
 
 ![expose from others](img/local_repository.png)
 
