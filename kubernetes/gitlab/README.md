@@ -90,3 +90,56 @@ Then we can start the build by trigger a jenkins job
 ![expose from others](img/build.png)
 
 
+
+
+#How to prepare the maven repository locally.
+
+prepare the settings.xml file and upload to your gitlab, the file like this:
+
+```
+hchenxa@hchen-mac:~/Documents/hchenxa/src/hchen/sprintBoot$ cat settings.xml
+
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                      https://maven.apache.org/xsd/settings-1.0.0.xsd">
+  <mirrors>
+    <mirror>
+      <id>nexus</id>
+      <name>nexus</name>
+      <url>http://130.211.130.194:8081/repository/maven-public</url>
+      <mirrorOf>*</mirrorOf>
+    </mirror>
+  </mirrors>
+</settings>
+
+```
+
+and place the file in your gitlab root path
+
+```
+hchenxa@hchen-mac:~/Documents/hchenxa/src/hchen/sprintBoot$ ll -rt
+total 8352
+drwxr-xr-x  7 hchenxa staff     238 Jul 21 13:26 ../
+drwxr-xr-x  4 hchenxa staff     136 Jul 21 13:26 src/
+-rw-r--r--  1 hchenxa staff     454 Jul 21 13:26 settings.xml
+-rw-r--r--  1 hchenxa staff    2955 Jul 21 13:26 pom.xml
+-rw-r--r--  1 hchenxa staff    1041 Jul 21 13:26 icp-deployment.yml
+-rw-r--r--  1 hchenxa staff 8534562 Jul 21 13:26 apache-maven-3.5.0-bin.tar.gz
+-rw-r--r--  1 hchenxa staff     402 Jul 21 13:26 Dockerfile
+drwxr-xr-x  9 hchenxa staff     306 Jul 21 13:26 ./
+drwxr-xr-x 12 hchenxa staff     408 Jul 21 13:27 .git/
+```
+
+then config the maven repository in maven project
+
+
+first create the maven project
+
+![expose from others](img/maven_project.png)
+
+then config the maven project
+
+![expose from others](img/private_repo.png)
+
+
