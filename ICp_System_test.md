@@ -1,8 +1,8 @@
-##ICp System Test High Level Test Plan
+## ICp System Test High Level Test Plan
 
 
 
-###Environment
+### Environment
 
 Following hardware and software resource needed.**1. Environment:**
 
@@ -18,7 +18,7 @@ Following hardware and software resource needed.**1. Environment:**
 		      
 		      
 		      
-###Scalability Test.
+### Scalability Test.
 
 **Scalability Test Criteria:**
 
@@ -82,7 +82,7 @@ The scalability test will be devided into each Sprint and each of squad need to 
       
 
 
-###Performance Test
+### Performance Test
 
 The performance test will be executed in each Sprint and each of the squard should test their own performance cases 
 
@@ -163,7 +163,7 @@ The performance test will be executed in each Sprint and each of the squard shou
   
   
 
-###Reliability Test
+### Reliability Test
 
 The test will be handled from Sprint 2 and ended before Sprint 3.
 
@@ -183,7 +183,7 @@ The test will be handled from Sprint 2 and ended before Sprint 3.
     2). Storage reliability
     
 
-###Longevity and Stress Test
+### Longevity and Stress Test
 
 
 The Longevity and Stress test will started from Sprint 1 and finished before RC sanity check.
@@ -193,6 +193,6 @@ The Longevity and Stress test will started from Sprint 1 and finished before RC 
 * Before new sprint started, the longevity test environment need to be patched with the latest build(each sprint will have a small release, so we can use the release packages in Longevity test) and re-run in 7*24 hours.
 
 
-###Feature integration Test
+### Feature integration Test
 
 
