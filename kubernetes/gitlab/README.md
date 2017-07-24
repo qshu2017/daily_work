@@ -7,10 +7,11 @@
 execute below commands:
 
 ```
-helm init -c
+root@hchenk8s2:~# helm init -c
+Creating /root/.helm/repository/repositories.yaml
 ```
 
-Then copy the gitlab packages in /root/.helm/repository/local and start the helm serve(the pacakge can be download from [github](https://github.ibm.com/qiujian/cfc-charts/blob/icbc/gitlab-ce-0.1.7.tgz))
+Then copy the gitlab packages in /root/.helm/repository/local and start the helm serve(the package can be download from [github](https://github.ibm.com/qiujian/cfc-charts/blob/icbc/gitlab-ce-0.1.7.tgz))
 
 ```
 root@hchenk8s2:~/.helm/repository/local# helm serve --address 9.111.254.208:8879
@@ -18,6 +19,7 @@ Regenerating index. This may take a moment.
 Now serving you on 9.111.254.208:8879
 ```
 
+Note: replace 
 
 Add the URL in ICp repositories in System -> Reposistories
 
