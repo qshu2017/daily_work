@@ -4,7 +4,9 @@
 
 ### Environment
 
-Following hardware and software resource needed.**1. Environment:**
+Following hardware and software resource needed.
+
+**1. Environment:**
 
 * Icp: 3 master nodes + 300 workers.
 
@@ -97,10 +99,10 @@ The performance test will be executed in each Sprint and each of the squard shou
 
 | Priority | Performance Metric| Criteria  | Comments |
 |------|------|------|------|
-| P1 | cli/api response | ~1s | |
-| P1 | GUI response | ~5s | |
-| P1 | Pod start time | ~500s | 95% pod ready |
-| P1 | Service discover time | ~2s | |
+| P1 | cli/api response | <1s | |
+| P1 | GUI response | <5s | |
+| P1 | Pod start time | <500s | 95% pod ready |
+| P1 | Service discover time | <2s | |
 | P1 | CRUD users | api response time within 1s| |
 | P2 | CRUD namespace | api response time within 1s | |
 | P1 | Network TPS/ | | need other aquad input |
