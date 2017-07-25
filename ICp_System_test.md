@@ -80,6 +80,12 @@ The scalability test will be devided into each Sprint and each of squad need to 
       
       1) 
       
+**Test Sprint4**
+
+* Bug retest related to scalability test
+
+* Patch the Sprint3 features and do the related scalability test.
+
 
 
 ### Performance Test
@@ -161,7 +167,13 @@ The performance test will be executed in each Sprint and each of the squard shou
   1) Concurrent users use Jmeter/load running
   
   
-  
+**Test Sprint4**
+
+* Bug retest which related to performance test
+
+* Patch the Sprint3 features and do the related performance cases.
+
+
 
 ### Reliability Test
 
@@ -182,17 +194,22 @@ The test will be handled from Sprint 2 and ended before Sprint 3.
     
     2). Storage reliability
     
+	 3). Service reliability(start concurrent client to send request, and during the service recive the request, shutdown some of pods to see the error request percentage.)
+    
 
 ### Longevity and Stress Test
 
 
 The Longevity and Stress test will started from Sprint 1 and finished before RC sanity check.
 
+And the main focus was on cluster healty like: monitory the cluster resource usage like cpu/memory usage to ensure no leak.
+
+
 * The Longevity test cases will be finalized at the end of Sprint 1.
-* Eash squad need to prepare the test cases, test scripts and monitor scripts in each sprint and patch in the Longevity test environment.
+* Eash squad need to prepare the test cases, test scripts and monitor scripts in each sprint and patch their cases in the Longevity test environment in each test cycle.
 * Before new sprint started, the longevity test environment need to be patched with the latest build(each sprint will have a small release, so we can use the release packages in Longevity test) and re-run in 7*24 hours.
 
 
 ### Feature integration Test
 
-
+* Each of squad focal should go through the new features delivery in each sprint and consider which features have interaction with others, pick them out and do interaction test to make sure the interaction quality.
